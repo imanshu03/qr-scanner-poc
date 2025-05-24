@@ -1,7 +1,11 @@
 "use client";
 import QrScanner from "qr-scanner";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { FlashIcon, Image02Icon } from "@hugeicons/core-free-icons";
+import {
+  FlashIcon,
+  Image02Icon,
+  FlashOffIcon,
+} from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
@@ -9,6 +13,7 @@ export default function Home() {
   const qrInstanceRef = useRef<QrScanner | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasFlash, setHasFlash] = useState(false);
+  const [isFlashOn, setIsFlashOn] = useState(false);
 
   const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -30,7 +35,9 @@ export default function Home() {
   };
 
   const onToggleFlash = () => {
-    qrInstanceRef.current?.toggleFlash();
+    qrInstanceRef.current?.toggleFlash().then(() => {
+      setIsFlashOn((old) => !old);
+    });
   };
 
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function Home() {
               onClick={onToggleFlash}
             >
               <HugeiconsIcon
-                icon={FlashIcon}
+                icon={isFlashOn ? FlashOffIcon : FlashIcon}
                 className="w-full h-full"
                 color="#FFFFFF"
               />
